@@ -95,6 +95,7 @@ void run_server(int port, const std::string& file) {
             if (poll_descriptors[i].revents & (POLLIN | POLLERR)) {
                 std::string msg = read_msg(poll_descriptors[i].fd);
                 if (checkHello(msg) && last_msg[i] == None) {
+                    std::cout << print_ip_info(poll_descriptors[i].fd) << " is now know as " << split(msg, ' ')[1] << std::endl;
                     moveline(coeffs, poll_descriptors[i].fd);
                     last_msg[i] = COEFF;
                     add_player_score(poll_descriptors[i].fd, split(msg, ' ')[1]);
