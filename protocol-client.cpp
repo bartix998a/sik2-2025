@@ -121,12 +121,6 @@ int run_client(int server_fd, const std::string& id) {
             poll_descriptors[0].revents = 0;
         }
 
-        if (poll_descriptors[1].revents == POLLIN) {
-            if(checkCoeff(read_msg(poll_descriptors[1].fd))) {
-                recieved_coeffs = true;
-            }
-        }
-
         if (process_msg(server_fd)) {
             return 0;
         }
