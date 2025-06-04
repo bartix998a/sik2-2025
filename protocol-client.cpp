@@ -97,6 +97,7 @@ int run_client(int server_fd, const std::string& id) {
     pollfd poll_descriptors[2];
     poll_descriptors[0].fd = STDIN_FILENO;
     poll_descriptors[1].fd = server_fd;
+    bool recieved_coeffs;
 
     for (int i = 0; i < 2; ++i) {
         poll_descriptors[i].revents = 0;
@@ -109,13 +110,20 @@ int run_client(int server_fd, const std::string& id) {
             syserr("poll");
         }
 
-        if (poll_descriptors[0].revents == POLLIN) {
+        if (recieved_coeffs && poll_descriptors[0].revents == POLLIN) {
             auto line = read_msg(STDIN_FILENO);
             if (checkPutPlayerInput(line)) {
                 auto tmp = "PUT " + line;
                 writen(poll_descriptors[1].fd, tmp.data(), tmp.size());
             } else {
                 std::cout << "ERROR: invalid input line " << line;
+            }
+            poll_descriptors[0].revents = 0;
+        }
+
+        if (poll_descriptors[1].revents == POLLIN) {
+            if(checkCoeff(read_msg(poll_descriptors[1].fd))) {
+                recieved_coeffs = true;
             }
         }
 
