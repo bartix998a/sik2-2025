@@ -13,6 +13,7 @@ add_executable(approx-server server_main.cpp
         reading.cpp
         protocol_server.cpp
         common2.cpp
+        debug.h
 )
 
 add_executable(approx-client client_main.cpp
@@ -23,4 +24,5 @@ add_executable(approx-client client_main.cpp
         protocol-client.cpp
         protocol-client.h
         common2.cpp
+        debug.h
 )

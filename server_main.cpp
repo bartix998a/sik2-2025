@@ -65,5 +65,7 @@ int main(int argc, char* argv[]) {
         wrong_args();
     }
 
+    run_server(port, file_path);
+
     return 0;
 }

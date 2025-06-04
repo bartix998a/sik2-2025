@@ -21,6 +21,7 @@ int main(int argc, char* argv[]) {
     bool autoamted = false;
     auto tmp = 0;
     struct sockaddr_in addr;
+    //TODO: -4 or -6
     while ((opt = getopt(argc, argv, "u:s:p:4:6:a:")) != -1) {
         switch (opt) {
             case 'u':

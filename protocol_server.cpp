@@ -12,6 +12,7 @@
 #include <fstream>
 #include <iostream>
 
+#include "debug.h"
 #include "protocol_server.h"
 #include "err.h"
 #include "common.h"
@@ -42,6 +43,10 @@ int get_socket(int port) {
     // Switch the socket to listening.
     if (listen(socket_fd, 100) < 0) {
         syserr("listen");
+    }
+
+    if constexpr (debug) {
+        std::cerr << "listening on port " << port << std::endl;
     }
 
     return socket_fd;
