@@ -37,7 +37,7 @@ template <typename T> int sgn(T val) {
 }
 
 void print_bad_msg(int fd, const std::string& msg) {
-    std::cerr << "ERROR: bas message from " << print_ip_info(fd)
+    std::cerr << "ERROR: bad message from " << print_ip_info(fd)
     << ", UNKNOWN: " << msg.substr(0, msg.size()-2) << std::endl;
 }
 
@@ -47,10 +47,16 @@ std::vector<double> send_hello(int server_fd, const std::string& id) {
     std::string  coeffs = read_msg(server_fd);
 
     while (true) {
+        if (coeffs == "") {
+            std::cerr << "ERROR: unexpected server disconnect" << std::endl;
+            return {};
+        }
+
         if (checkCoeff(coeffs)) {
-            coeffs = read_msg(server_fd);
+            break;
         } else {
             print_bad_msg(server_fd, read_msg(server_fd));
+            coeffs = read_msg(server_fd);
         }
 
     }
@@ -63,14 +69,24 @@ std::vector<double> send_hello(int server_fd, const std::string& id) {
     return res;
 }
 
-bool process_msg(int fd) {
+bool process_msg(int fd, int& ret) {
     std::string msg = read_msg(fd);
+
+    if (msg == "") {
+        std::cerr << "ERROR: unexpected server disconnect" << std::endl;
+        ret = 1;
+        return true;
+    }
+
     auto msg_factorized = split(msg, ' ');
     if (msg_factorized[0] == "SCORING") {
         std::cout << "Game end, scoring: " << msg.substr(5, msg.size() - 2) << std::endl;
+        ret = 0;
         return true;
     } else if (msg_factorized[0] == "STATE" && checkState(msg)) {
         std::cout << "Recieved state " << msg.substr(5, msg.size() - 2) << std::endl;
+    } else if (msg_factorized[0] == "COEFFS" && checkCoeff(msg)) {
+        std::cout << "Recieved coefficients " << msg.substr(5, msg.size() - 2) << std::endl;
     } else {
         print_bad_msg(fd, msg);
     }
@@ -80,7 +96,11 @@ bool process_msg(int fd) {
 int run_client_automatic(int server_fd, const std::string& id) {
     unsigned long K;
     auto coeffs = send_hello(server_fd, id);
+    if (coeffs.empty()) {
+        return 1;
+    }
     std::vector<double> vals(coeffs.size(), 0);
+    int ret;
     while (true) {
         for (size_t i = 0; i < coeffs.size(); i++) {
             auto diff = eval(coeffs, i) - vals[i];
@@ -95,8 +115,8 @@ int run_client_automatic(int server_fd, const std::string& id) {
             }
         }
 
-        if (process_msg(server_fd)) {
-            return 0;
+        if (process_msg(server_fd, ret)) {
+            return ret;
         }
     }
 }
@@ -106,12 +126,15 @@ int run_client(int server_fd, const std::string& id) {
     poll_descriptors[0].fd = STDIN_FILENO;
     poll_descriptors[1].fd = server_fd;
     bool recieved_coeffs;
+    int ret;
 
     for (int i = 0; i < 2; ++i) {
         poll_descriptors[i].revents = 0;
         poll_descriptors[i].events = POLLIN;
     }
-    send_hello(server_fd, id);
+    if (send_hello(server_fd, id).empty()) {
+        return 1;
+    }
 
     while (true) {
         if (poll(poll_descriptors, 2, 0) < 0) {
@@ -129,8 +152,8 @@ int run_client(int server_fd, const std::string& id) {
             poll_descriptors[0].revents = 0;
         }
 
-        if (process_msg(server_fd)) {
-            return 0;
+        if (process_msg(server_fd, ret)) {
+            return ret;
         }
     }
 }
