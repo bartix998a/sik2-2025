@@ -36,14 +36,23 @@ template <typename T> int sgn(T val) {
     return (T(0) < val) - (val < T(0));
 }
 
+void print_bad_msg(int fd, const std::string& msg) {
+    std::cerr << "ERROR: bas message from " << print_ip_info(fd)
+    << ", UNKNOWN: " << msg.substr(0, msg.size()-2) << std::endl;
+}
+
 std::vector<double> send_hello(int server_fd, const std::string& id) {
     auto tmp = "HELLO " + id + "\r\n";
     writen(server_fd, tmp.data(), tmp.size());
     std::string  coeffs = read_msg(server_fd);
 
-    while (!checkCoeff(coeffs)) {
-        // TODO : write error msg description
-        coeffs = read_msg(server_fd);
+    while (true) {
+        if (checkCoeff(coeffs)) {
+            coeffs = read_msg(server_fd);
+        } else {
+            print_bad_msg(server_fd, read_msg(server_fd));
+        }
+
     }
 
     std::cout << "Recieved coefficients " << coeffs.substr(5, coeffs.size() - 2) << std::endl;
@@ -63,8 +72,7 @@ bool process_msg(int fd) {
     } else if (msg_factorized[0] == "STATE" && checkState(msg)) {
         std::cout << "Recieved state " << msg.substr(5, msg.size() - 2) << std::endl;
     } else {
-        std::cerr << "ERROR: bas message from " << print_ip_info(fd)
-        << ", UNKNOWN: " << msg.substr(0, msg.size()-2) << std::endl;
+        print_bad_msg(fd, msg);
     }
     return false;
 }
