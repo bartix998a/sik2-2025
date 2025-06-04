@@ -5,8 +5,8 @@
 #include <set>
 #include <memory>
 #include <poll.h>
-#include <iostream>
 #include <map>
+#include <algorithm>
 
 #include "common.h"
 #include "common2.h"
