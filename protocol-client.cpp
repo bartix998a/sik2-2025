@@ -37,7 +37,7 @@ template <typename T> int sgn(T val) {
 }
 
 std::vector<double> send_hello(int server_fd, const std::string& id) {
-    auto tmp = "Hello " + id + "\r\n";
+    auto tmp = "HELLO " + id + "\r\n";
     writen(server_fd, tmp.data(), tmp.size());
     std::string  coeffs = read_msg(server_fd);
 

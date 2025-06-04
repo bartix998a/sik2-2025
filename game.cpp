@@ -83,8 +83,31 @@ void clear_game() {
     penalties.clear();
 }
 
+std::string escapeWhitespace(const std::string& input) {
+    std::string output;
+    for (char c : input) {
+        switch (c) {
+            case ' ':
+                output += "\\s";  // or "\\ ", if you prefer
+                break;
+            case '\t':
+                output += "\\t";
+                break;
+            case '\n':
+                output += "\\n";
+                break;
+            case '\r':
+                output += "\\r";
+                break;
+            default:
+                output += c;
+        }
+    }
+    return output;
+}
+
 void handle_wrong_message(int fd, std::string& msg) {
-    std::cerr << "ERROR: bas message from " << print_ip_info(fd)
+    std::cerr << "ERROR: bad message from " << print_ip_info(fd)
               << ", " << (ids.contains(fd) ? ids[fd] : "UNKNOWN") << ": "
               << msg.substr(0, msg.size()-2) << std::endl;
     if (!ids.contains(fd)) {
