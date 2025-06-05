@@ -97,6 +97,6 @@ bool checkCoeff(const std::string& msg) {
 }
 
 bool checkPutPlayerInput(const std::string& msg) {
-    std::regex put_reg(point_reg + " " + rational_reg + "\r\n");
+    std::regex put_reg(point_reg + " " + rational_reg + "\n");
     return std::regex_match(msg, put_reg);
 }
