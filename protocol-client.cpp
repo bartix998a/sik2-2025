@@ -74,9 +74,9 @@ bool process_msg(int fd, int& ret) {
         ret = 0;
         return true;
     } else if (msg_factorized[0] == "STATE" && checkState(msg)) {
-        std::cout << "Recieved state " << msg.substr(5, msg.size() - 2) << std::endl;
+        std::cout << "Recieved state " << msg.substr(5, msg.size());
     } else if (msg_factorized[0] == "COEFFS" && checkCoeff(msg)) {
-        std::cout << "Recieved coefficients " << msg.substr(5, msg.size() - 2) << std::endl;
+        std::cout << "Recieved coefficients " << msg.substr(5, msg.size());
     } else {
         print_bad_msg(fd, msg);
     }
