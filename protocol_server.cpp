@@ -94,7 +94,7 @@ void run_server(int port, const std::string& file) {
         }
 
         for (size_t i = 1; i < poll_descriptors.size(); i++) {
-            std::cout << i << std::endl;
+            std::cout << i << " " << poll_descriptors[i].revents << std::endl;
             if (poll_descriptors[i].revents & (POLLIN | POLLERR)) {
                 std::string msg = read_msg(poll_descriptors[i].fd);
                 if (checkHello(msg) && last_msg[i] == None) {
