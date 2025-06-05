@@ -7,6 +7,7 @@
 #include <sstream>
 #include <iostream>
 #include <poll.h>
+#include <algorithm>
 
 #include "common.h"
 #include "common2.h"
@@ -53,7 +54,10 @@ void add_put(int client_fd, const std::string& msg) {
     approximations[client_fd][std::strtol(split(msg, ' ')[1].data(), nullptr, 10)] +=
             std::strtold(split(msg, ' ')[1].data(), nullptr);
     auto tmp = get_state(client_fd);
-    writen(client_fd, tmp.data(), tmp.size());
+    auto delay = std::count_if(ids[client_fd].begin(), ids[client_fd].end(),
+                               [](unsigned char c) {return std::islower(c);});
+    add_send(client_fd, delay, tmp);
+    add_send(STDOUT_FILENO, delay, "Sending state " + tmp.substr(6, tmp.size() - 2) + " to " + ids[client_fd] + "\n");
     client_puts[client_fd]++;
 }
 

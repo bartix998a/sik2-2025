@@ -112,7 +112,6 @@ void run_server(int port, const std::string& file) {
                         auto tmp = "BAD PUT " + msg.substr(4, msg.size() - 1);
                         add_send(poll_descriptors[i].fd, 1, tmp);
                     } else {
-                        puts_count++;
                         add_put(poll_descriptors[i].fd, msg);
                     }
                 } else if (msg == "") { // client disconnects
