@@ -75,7 +75,7 @@ void moveline(int in, int out) {
             std::cout << "breaking";
             break; // stop after reading one line
         }
-
+        std::cout << "didnt break" << std::endl;
         prev = c;
     }
 }
