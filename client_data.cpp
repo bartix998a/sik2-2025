@@ -72,7 +72,7 @@ void execute_tasks() {
 bool answering(int client_fd) {
     return std::find_if(
             tasks.begin(), tasks.end(),
-            [client_fd](auto& t) {return std::get<3>(t) == client_fd;}) == tasks.end();
+            [client_fd](auto& t) {return std::get<3>(t) == client_fd;}) != tasks.end();
 }
 
 int get_timeout() {
