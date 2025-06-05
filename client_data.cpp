@@ -30,7 +30,6 @@ std::map<int, std::string> ids;
 void add_player(int client_fd) {
     poll_descriptors.push_back({client_fd, POLLIN, 0});
     tasks.insert(std::tuple(system_clock::now() + miliseconds(3000),WAIT_FOR_HELLO, nullptr, client_fd));
-    poll_descriptors.push_back({client_fd, POLLIN, 0});
 }
 
 void add_send(int client_fd, int delay, const std::string& meessage) {

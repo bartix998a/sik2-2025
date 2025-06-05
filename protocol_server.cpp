@@ -52,6 +52,7 @@ int get_socket(int port) {
     return socket_fd;
 }
 
+// TODO: add last_msg to client_data
 void run_server(int port, const std::string& file) {
     int socket_fd = get_socket(port);
     int coeffs = open(file.data(), O_RDONLY);
