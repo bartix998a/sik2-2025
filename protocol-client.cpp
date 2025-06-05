@@ -125,7 +125,6 @@ int run_client(int server_fd, const std::string& id) {
     pollfd poll_descriptors[2];
     poll_descriptors[0].fd = STDIN_FILENO;
     poll_descriptors[1].fd = server_fd;
-    bool recieved_coeffs;
     int ret;
 
     for (int i = 0; i < 2; ++i) {
@@ -141,7 +140,7 @@ int run_client(int server_fd, const std::string& id) {
             syserr("poll");
         }
 
-        if (recieved_coeffs && poll_descriptors[0].revents == POLLIN) {
+        if (poll_descriptors[0].revents == POLLIN) {
             auto line = read_msg(STDIN_FILENO);
             if (checkPutPlayerInput(line)) {
                 auto tmp = "PUT " + line;
