@@ -9,7 +9,10 @@
 #include <map>
 #include <string>
 
+#include "message.h"
+
 extern std::vector<struct pollfd> poll_descriptors;
+extern std::map<int, Message> last_msg;
 
 void add_player(int client_fd);
 void add_send(int client_fd, int delay, const std::string& meessage);

@@ -26,6 +26,7 @@ using seconds = std::chrono::seconds;
 // key is socket descriptor
 static std::set<std::tuple<system_clock::time_point, task, std::shared_ptr<std::string>, int>> tasks;
 std::vector<struct pollfd> poll_descriptors(1);
+std::map<int, Message> last_msg;
 std::map<int, std::string> ids;
 
 void add_player(int client_fd) {
@@ -64,6 +65,7 @@ void execute_tasks() {
                     break;
                 case REMOVE:
                     std::erase_if(poll_descriptors, [task](pollfd f) { return f.fd == get<3>(task); });
+                    last_msg.erase(get<3>(task));
                     break;
             }
         }
@@ -89,6 +91,7 @@ void clear_tasks() {
     }
 
     poll_descriptors.erase(++poll_descriptors.begin(), poll_descriptors.end());
+    last_msg.clear();
 
 }
 

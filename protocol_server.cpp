@@ -60,8 +60,6 @@ void run_server(int port, const std::string& file) {
 
     // Initialization of pollfd structures.
 
-    std::vector<Message> last_msg(1); // last message sent by server to client
-
     // The main socket has index 0.
     poll_descriptors[0].fd = socket_fd;
     poll_descriptors[0].revents = 0;
@@ -91,21 +89,21 @@ void run_server(int port, const std::string& file) {
                 syserr("fcntl");
             }
             add_player(client_fd);
-            last_msg.push_back(None);
+            last_msg[client_fd] = None;
             poll_descriptors[0].revents = 0;
         }
 
         for (size_t i = 1; i < poll_descriptors.size(); i++) {
             if (poll_descriptors[i].revents & (POLLIN | POLLERR)) {
                 std::string msg = read_msg(poll_descriptors[i].fd);
-                if (checkHello(msg) && last_msg[i] == None) {
+                if (checkHello(msg) && last_msg[poll_descriptors[i].fd] == None) {
                     std::cout << print_ip_info(poll_descriptors[i].fd) << " is now know as " << split(msg, ' ')[1];
-                    last_msg[i] = COEFF;
+                    last_msg[poll_descriptors[i].fd] = COEFF;
                     add_player_score(poll_descriptors[i].fd, split(msg, ' ')[1]);
                     handle_hello(poll_descriptors[i].fd);
                     send_coeffs(poll_descriptors[i].fd,coeffs);
                 } else if (checkPut(msg)) {
-                    if ((last_msg[i] != COEFF && last_msg[i] != STATE)
+                    if ((last_msg[poll_descriptors[i].fd] != COEFF && last_msg[poll_descriptors[i].fd] != STATE)
                         || answering(poll_descriptors[i].fd)) {
                         add_penalty(poll_descriptors[i].fd, msg);
                     } else if (!checkPutVals(msg)) {
