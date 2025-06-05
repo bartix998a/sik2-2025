@@ -123,6 +123,7 @@ void clear_game() {
     penalties.clear();
     coeffs.clear();
     client_puts.clear();
+    puts_count = 0;
 }
 
 std::string escapeWhitespace(const std::string& input) {
