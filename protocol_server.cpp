@@ -68,7 +68,6 @@ void run_server(int port, const std::string& file) {
     poll_descriptors[0].events = POLLIN;
 
     while (true) {
-        std::cout << "poll" << std::endl;
         struct sockaddr_in client_address;
         for (auto p : poll_descriptors) {
             p.revents = 0;
@@ -95,7 +94,6 @@ void run_server(int port, const std::string& file) {
         }
 
         for (size_t i = 1; i < poll_descriptors.size(); i++) {
-            std::cout << i << " " << poll_descriptors[i].revents << std::endl;
             if (poll_descriptors[i].revents & (POLLIN | POLLERR)) {
                 std::string msg = read_msg(poll_descriptors[i].fd);
                 if (checkHello(msg) && last_msg[i] == None) {
