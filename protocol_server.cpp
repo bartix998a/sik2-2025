@@ -94,12 +94,13 @@ void run_server(int port, const std::string& file) {
         }
 
         for (size_t i = 1; i < poll_descriptors.size(); i++) {
+            std::cout << i << std::endl;
             if (poll_descriptors[i].revents & (POLLIN | POLLERR)) {
-                std::cout << i << " " << poll_descriptors.size() << std::endl;
                 std::string msg = read_msg(poll_descriptors[i].fd);
                 if (checkHello(msg) && last_msg[i] == None) {
                     std::cout << print_ip_info(poll_descriptors[i].fd) << " is now know as " << split(msg, ' ')[1];
                     moveline(coeffs, poll_descriptors[i].fd);
+                    std::cout << "Sent coefficients to " << split(msg, ' ')[1];
                     last_msg[i] = COEFF;
                     add_player_score(poll_descriptors[i].fd, split(msg, ' ')[1]);
                 } else if (checkPut(msg)) {
