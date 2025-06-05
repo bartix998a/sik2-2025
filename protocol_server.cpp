@@ -98,10 +98,10 @@ void run_server(int port, const std::string& file) {
                 std::string msg = read_msg(poll_descriptors[i].fd);
                 if (checkHello(msg) && last_msg[i] == None) {
                     std::cout << print_ip_info(poll_descriptors[i].fd) << " is now know as " << split(msg, ' ')[1];
-                    send_coeffs(poll_descriptors[i].fd,coeffs);
                     last_msg[i] = COEFF;
                     add_player_score(poll_descriptors[i].fd, split(msg, ' ')[1]);
                     handle_hello(poll_descriptors[i].fd);
+                    send_coeffs(poll_descriptors[i].fd,coeffs);
                 } else if (checkPut(msg)) {
                     if ((last_msg[i] != COEFF && last_msg[i] != STATE)
                         || answering(poll_descriptors[i].fd)) {
