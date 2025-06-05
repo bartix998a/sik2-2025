@@ -51,7 +51,7 @@ std::vector<double> send_hello(int server_fd, const std::string& id) {
 
     }
 
-    std::cout << "Recieved coefficients " << coeffs.substr(5, coeffs.size() - 2) << std::endl;
+    std::cout << "Recieved coefficients " << coeffs.substr(5, coeffs.size());
     auto coeffs_split = split(coeffs, ' ');
     std::vector<double> res;
     std::transform(coeffs_split.begin() + 1, coeffs_split.end(), std::back_inserter(res),
