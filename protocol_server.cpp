@@ -67,6 +67,7 @@ void run_server(int port, const std::string& file) {
     poll_descriptors[0].events = POLLIN;
 
     while (true) {
+        std::cout << "poll" << std::endl;
         struct sockaddr_in client_address;
         for (auto p : poll_descriptors) {
             p.revents = 0;
