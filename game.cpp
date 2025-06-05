@@ -28,7 +28,7 @@ u_int8_t N = 4;
 long M = 131;
 
 void add_player_score(int client_fd, const std::string& player_id) {
-    ids[client_fd] = player_id;
+    ids[client_fd] = player_id.substr(0, player_id.size() - 2);
     approximations[client_fd] = std::vector<double>(K, 0);
     penalties[client_fd] = 0;
     client_puts[client_fd] = 0;
@@ -82,7 +82,7 @@ void send_coeffs(int fd, int coeffs_fd) {
     writen(fd, coeffs_msg.data(), coeffs_msg.size());
     auto coeffs_split = split(coeffs_msg,' ');
     std::cout << coeffs_msg;
-    std::cout << ids[fd] << " get coefficients " << coeffs_msg.substr(6, coeffs.size());
+    std::cout << ids[fd] << " get coefficients " << coeffs_msg.substr(6, coeffs_msg.size());
     std::vector<double> res;
     std::transform(coeffs_split.begin() + 1, coeffs_split.end(), std::back_inserter(res),
                    [](auto& s){return std::stod(s);});
