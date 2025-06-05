@@ -55,6 +55,7 @@ std::vector<double> send_hello(int server_fd, const std::string& id) {
         if (checkCoeff(coeffs)) {
             break;
         } else {
+            std::cout << "here" << std::endl;
             print_bad_msg(server_fd, coeffs);
             coeffs = read_msg(server_fd);
         }
