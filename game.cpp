@@ -61,7 +61,7 @@ void add_put(int client_fd, const std::string& msg) {
     auto delay = std::count_if(ids[client_fd].begin(), ids[client_fd].end(),
                                [](unsigned char c) {return std::islower(c);});
     add_send(client_fd, delay, tmp);
-    add_send(STDOUT_FILENO, delay, "Sending state " + tmp.substr(6, tmp.size() - 2) + " to " + ids[client_fd] + "\n");
+    add_send(STDOUT_FILENO, delay, "Sending state " + tmp.substr(6, tmp.size() - 4) + " to " + ids[client_fd] + "\n");
     client_puts[client_fd]++;
 }
 
