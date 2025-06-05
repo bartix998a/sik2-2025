@@ -7,6 +7,7 @@
 #include <poll.h>
 #include <map>
 #include <algorithm>
+#include <iostream>
 
 #include "common.h"
 #include "common2.h"
@@ -69,6 +70,7 @@ void execute_tasks() {
 }
 
 bool answering(int client_fd) {
+    std::cout << tasks.size() << std::endl;
     return std::find_if(
             tasks.begin(), tasks.end(),
             [client_fd](auto& t) {return std::get<3>(t) == client_fd;}) == tasks.end();
