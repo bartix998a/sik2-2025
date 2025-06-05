@@ -71,7 +71,7 @@ void moveline(int in, int out) {
             syserr("write");
         }
 
-        if ((c == '\n' && prev == '\r') || c == EOF) {
+        if (c == EOF) {
             break; // stop after reading one line
         }
 
