@@ -62,6 +62,7 @@ void moveline(int in, int out) {
     char prev = '\000';
     while ((read_out = read(in, &c, 1)) == 1) {
         if (read_out < 0) {
+            std::cout << "is this really this syserror" << std::endl;
             syserr("read");
         }
 
@@ -72,10 +73,8 @@ void moveline(int in, int out) {
         }
 
         if ((c == '\n' && prev == '\r') || c == EOF) {
-            std::cout << "breaking";
             break; // stop after reading one line
         }
-        std::cout << "didnt break" << std::endl;
         prev = c;
     }
 }
