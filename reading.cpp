@@ -71,7 +71,8 @@ void moveline(int in, int out) {
             syserr("write");
         }
 
-        if (c == EOF) {
+        if ((c == '\n' && prev == '\r') || c == EOF) {
+            std::cout << "breaking"
             break; // stop after reading one line
         }
 
