@@ -43,6 +43,11 @@ void remove_client(int client_fd) {
     erase_if(tasks, [client_fd](auto t) {return std::get<3>(t) == client_fd;});
 }
 
+void handle_hello(int client_fd) {
+    erase_if(tasks, [client_fd](auto t)
+                            {return std::get<3>(t) == client_fd && get<1>(t) == WAIT_FOR_HELLO;});
+}
+
 void execute_tasks() {
     auto now = system_clock::now();
     for (auto task : tasks) {

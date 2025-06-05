@@ -18,6 +18,6 @@ void execute_tasks();
 bool answering(int client_fd);
 int get_timeout();
 void clear_tasks();
-
+void handle_hello(int client_fd);
 
 #endif //ZAL1_CLIENT_DATA_H

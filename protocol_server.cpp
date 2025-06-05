@@ -53,6 +53,7 @@ int get_socket(int port) {
 }
 
 // TODO: add last_msg to client_data
+// TODO: disconect upon no hello probably causes segfault
 void run_server(int port, const std::string& file) {
     int socket_fd = get_socket(port);
     int coeffs = open(file.data(), O_RDONLY);
@@ -103,6 +104,7 @@ void run_server(int port, const std::string& file) {
                     std::cout << "Sent coefficients to " << split(msg, ' ')[1];
                     last_msg[i] = COEFF;
                     add_player_score(poll_descriptors[i].fd, split(msg, ' ')[1]);
+                    handle_hello(poll_descriptors[i].fd);
                 } else if (checkPut(msg)) {
                     if (last_msg[i] == COEFF || last_msg[i] == STATE || answering(poll_descriptors[i].fd)) {
                         add_penalty(poll_descriptors[i].fd, msg);
