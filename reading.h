@@ -9,7 +9,7 @@
 #include <vector>
 #include <tuple>
 
-std::string read_msg(int socket_fd);
+std::string read_msg(int socket_fd, bool reading_stdin = false);
 void moveline(int in, int out);
 bool checkHello(const std::string& msg);
 bool checkPut(const std::string& msg);

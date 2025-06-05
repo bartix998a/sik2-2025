@@ -27,7 +27,7 @@ std::vector<std::string> split(const std::string& s, char delimiter) {
     return tokens;
 }
 
-std::string read_msg(int socket_fd) {
+std::string read_msg(int socket_fd, bool reading_stdin) {
     char input;
     bool end = false;
     std::string res = "";
@@ -37,7 +37,7 @@ std::string read_msg(int socket_fd) {
             syserr("read");
         }
 
-        if (res.back() == '\r' && input == '\n') {
+        if ((res.back() == '\r' || reading_stdin) && input == '\n') {
             break;
         }
         res += input;

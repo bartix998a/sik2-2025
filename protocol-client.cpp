@@ -147,7 +147,7 @@ int run_client(int server_fd, const std::string& id) {
         }
 
         if (poll_descriptors[0].revents == POLLIN) {
-            auto line = read_msg(STDIN_FILENO);
+            auto line = read_msg(STDIN_FILENO, true);
             if (checkPutPlayerInput(line)) {
                 auto tmp = "PUT " + line;
                 writen(poll_descriptors[1].fd, tmp.data(), tmp.size());
