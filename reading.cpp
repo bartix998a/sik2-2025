@@ -6,9 +6,11 @@
 #include <cstdlib>
 #include <unistd.h>
 #include <regex>
+#include <iostream>
 
 #include "reading.h"
 #include "err.h"
+#include "debug.h"
 
 static std::string point_reg = "[0-9]+";
 static std::string rational_reg = R"([-+]?\d+\.\d{7})";
@@ -46,6 +48,11 @@ std::string read_msg(int socket_fd) {
     }
 
     res += input;
+
+    if constexpr (debug) {
+        std::cerr << "recieved message " << res << std::endl;
+    }
+
     return res;
 }
 
