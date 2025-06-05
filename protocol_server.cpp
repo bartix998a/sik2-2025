@@ -104,7 +104,8 @@ void run_server(int port, const std::string& file) {
                     add_player_score(poll_descriptors[i].fd, split(msg, ' ')[1]);
                     handle_hello(poll_descriptors[i].fd);
                 } else if (checkPut(msg)) {
-                    if (last_msg[i] == COEFF || last_msg[i] == STATE || answering(poll_descriptors[i].fd)) {
+                    if ((last_msg[i] != COEFF && last_msg[i] != STATE)
+                        || answering(poll_descriptors[i].fd)) {
                         add_penalty(poll_descriptors[i].fd, msg);
                     } else if (!checkPutVals(msg)) {
                         auto tmp = "BAD PUT " + msg.substr(4, msg.size() - 1);
