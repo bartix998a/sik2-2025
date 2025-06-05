@@ -94,7 +94,7 @@ void send_coeffs(int fd, int coeffs_fd) {
 
 double calculate_score(int client_fd) {
     double res = 0;
-    for (size_t i = 0; i < coeffs[client_fd].size(); i++) {
+    for (size_t i = 1; i < coeffs[client_fd].size(); i++) {
         auto tmp = approximations[client_fd][i] - eval(coeffs[client_fd], i);
         res += tmp * tmp;
     }
@@ -110,9 +110,10 @@ void send_scoring() {
 
     scoring += "\r\n";
     std::cout << "Game end, scoring:" << scoring;
+    auto tmp = "SCORING" + scoring;
 
     for (auto fd :poll_descriptors) {
-        add_send(fd.fd, 0, "SCORING" + scoring);
+        writen(fd.fd, tmp.data(), tmp.size());
     }
     execute_tasks();
 }
