@@ -22,5 +22,6 @@ bool checkPutVals(const std::string& msg);
 void remove_client_score(int client_fd);
 void handle_wrong_message(int fd, std::string& msg);
 void send_coeffs(int fd, int coeffs_fd);
+void send_scoring();
 
 #endif //ZAL1_GAME_H

@@ -132,6 +132,7 @@ void run_server(int port, const std::string& file) {
         if (puts_count < M) {
             execute_tasks();
         } else {
+            send_scoring();
             clear_game();
             clear_tasks();
         }
