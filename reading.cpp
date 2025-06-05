@@ -30,7 +30,7 @@ std::string read_msg(int socket_fd) {
     bool end = false;
     std::string res = "";
     int val;
-    while (val = read(socket_fd, &input, 1) && !end) {
+    while ((val = read(socket_fd, &input, 1)) && !end) {
         if (val < 0) {
             syserr("read");
         }
