@@ -134,8 +134,8 @@ void run_server(int port, const std::string& file) {
         } else {
             send_scoring();
             std::cout << "post scoring alive\n";
-//            clear_game();
-//            clear_tasks();
+            clear_game();
+            clear_tasks();
         }
 
 
