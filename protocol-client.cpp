@@ -55,7 +55,6 @@ std::vector<double> send_hello(int server_fd, const std::string& id) {
         if (checkCoeff(coeffs)) {
             break;
         } else {
-            std::cout << "here23 " << (coeffs.empty()) << " " << std::endl;
             print_bad_msg(server_fd, coeffs);
             coeffs = read_msg(server_fd);
         }
@@ -89,7 +88,6 @@ bool process_msg(int fd, int& ret) {
     } else if (msg_factorized[0] == "COEFFS" && checkCoeff(msg)) {
         std::cout << "Recieved coefficients " << msg.substr(5, msg.size() - 2) << std::endl;
     } else {
-        std::cout << "here" << std::endl;
         print_bad_msg(fd, msg);
     }
     return false;
@@ -134,6 +132,7 @@ int run_client(int server_fd, const std::string& id) {
         poll_descriptors[i].events = POLLIN;
     }
     if (send_hello(server_fd, id).empty()) {
+        close(server_fd);
         return 1;
     }
 

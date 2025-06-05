@@ -11,7 +11,7 @@
 #include "err.h"
 
 static std::string point_reg = "[0-9]+";
-static std::string rational_reg = R"(^-?\d+(\.\d{1,7})?$)";
+static std::string rational_reg = R"([-+]?\d+\.\d{7})";
 
 std::vector<std::string> split(const std::string& s, char delimiter) {
     std::vector<std::string> tokens;
@@ -85,7 +85,7 @@ bool checkState(const std::string& msg) {
 }
 
 bool checkCoeff(const std::string& msg) {
-    std::regex coeff_reg("COEFF( " + rational_reg + ")*\r\n");
+    std::regex coeff_reg("COEFF(\\s" + rational_reg + ")*\r\n");
     return std::regex_match(msg, coeff_reg);
 }
 
