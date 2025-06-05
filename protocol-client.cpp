@@ -36,20 +36,19 @@ std::vector<double> send_hello(int server_fd, const std::string& id) {
     writen(server_fd, tmp.data(), tmp.size());
     std::string  coeffs = read_msg(server_fd);
 
-    while (true) {
         if (coeffs == "") {
             std::cerr << "ERROR: unexpected server disconnect" << std::endl;
             return {};
         }
 
         if (checkCoeff(coeffs)) {
-            break;
+            std::cerr << "ERROR: incorrect first message" << std::endl;
+            return {};
         } else {
             print_bad_msg(server_fd, coeffs);
             coeffs = read_msg(server_fd);
         }
 
-    }
 
     std::cout << "Recieved coefficients " << coeffs.substr(5, coeffs.size());
     auto coeffs_split = split(coeffs, ' ');

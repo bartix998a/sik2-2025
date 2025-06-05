@@ -115,7 +115,6 @@ void send_scoring() {
     for (auto fd :poll_descriptors) {
         writen(fd.fd, tmp.data(), tmp.size());
     }
-    execute_tasks();
 }
 
 void clear_game() {

@@ -133,6 +133,7 @@ void run_server(int port, const std::string& file) {
             execute_tasks();
         } else {
             send_scoring();
+            std::cout << "post scoring alive\n";
 //            clear_game();
 //            clear_tasks();
         }
