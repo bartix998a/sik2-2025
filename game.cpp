@@ -121,6 +121,8 @@ void clear_game() {
     ids.clear();
     approximations.clear();
     penalties.clear();
+    coeffs.clear();
+    client_puts.clear();
 }
 
 std::string escapeWhitespace(const std::string& input) {

@@ -88,5 +88,7 @@ void clear_tasks() {
         close(poll_descriptors[i].fd);
     }
 
+    poll_descriptors.erase(poll_descriptors.begin()++, poll_descriptors.end());
+
 }
 
