@@ -69,13 +69,13 @@ bool answering(int client_fd) {
 }
 
 int get_timeout() {
-    return std::chrono::duration_cast<miliseconds>(
+    return tasks.empty() ? -1 : std::chrono::duration_cast<miliseconds>(
             std::get<0>(*std::min_element(tasks.begin(), tasks.end())) - system_clock::now()).count();
 }
 
 void clear_tasks() {
     tasks.clear();
-    for (int i = 1; i < poll_descriptors.size(); i++) {
+    for (size_t i = 1; i < poll_descriptors.size(); i++) {
         close(poll_descriptors[i].fd);
     }
 
