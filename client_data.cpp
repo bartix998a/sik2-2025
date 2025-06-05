@@ -67,6 +67,7 @@ void execute_tasks() {
                     break;
             }
         }
+        tasks.erase(tasks.begin());
     }
 }
 
