@@ -41,12 +41,9 @@ std::vector<double> send_hello(int server_fd, const std::string& id) {
             return {};
         }
 
-        if (checkCoeff(coeffs)) {
-            std::cerr << "ERROR: incorrect first message" << std::endl;
-            return {};
-        } else {
+        if (!checkCoeff(coeffs)) {
             print_bad_msg(server_fd, coeffs);
-            coeffs = read_msg(server_fd);
+            return {};
         }
 
 
