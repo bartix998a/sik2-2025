@@ -112,8 +112,8 @@ void send_scoring() {
     std::cout << "Game end, scoring:" << scoring;
     auto tmp = "SCORING" + scoring;
 
-    for (auto fd :poll_descriptors) {
-        writen(fd.fd, tmp.data(), tmp.size());
+    for (size_t i = 1; i < poll_descriptors.size(); i++) {
+        writen(poll_descriptors[i].fd, tmp.data(), tmp.size());
     }
 }
 
