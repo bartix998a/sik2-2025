@@ -13,6 +13,7 @@
 #include <numeric>
 #include <arpa/inet.h>
 #include <sys/socket.h>
+#include <fcntl.h>
 
 #include "err.h"
 #include "protocol-client.h"
@@ -134,6 +135,10 @@ int run_client(int server_fd, const std::string& id) {
     if (send_hello(server_fd, id).empty()) {
         close(server_fd);
         return 1;
+    }
+
+    if (fcntl(server_fd, F_SETFL, O_NONBLOCK)) {
+        syserr("fcntl");
     }
 
     while (true) {
