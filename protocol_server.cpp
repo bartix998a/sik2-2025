@@ -115,6 +115,9 @@ void run_server(int port, const std::string& file) {
                         puts_count++;
                         add_put(poll_descriptors[i].fd, msg);
                     }
+                } else if (msg == "") { // client disconnects
+                    remove_client((poll_descriptors[i].fd));
+                    remove_client_score(poll_descriptors[i].fd);
                 } else {
                     handle_wrong_message(poll_descriptors[i].fd, msg);
                 }
