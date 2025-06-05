@@ -94,7 +94,7 @@ void send_coeffs(int fd, int coeffs_fd) {
 
 double calculate_score(int client_fd) {
     double res = 0;
-    for (size_t i = 1; i < coeffs[client_fd].size(); i++) {
+    for (size_t i = 0; i < coeffs[client_fd].size(); i++) {
         auto tmp = approximations[client_fd][i] - eval(coeffs[client_fd], i);
         res += tmp * tmp;
     }
@@ -103,9 +103,9 @@ double calculate_score(int client_fd) {
 
 void send_scoring() {
     std::string scoring = "";
-    for (auto fd : poll_descriptors) {
-        scoring += " " + ids[fd.fd];
-        scoring += " " + std::to_string(calculate_score(fd.fd) - penalties[fd.fd]);
+    for (size_t i = 1; i < poll_descriptors.size(); i++) {
+        scoring += " " + ids[poll_descriptors[i].fd];
+        scoring += " " + std::to_string(calculate_score(poll_descriptors[i].fd) - penalties[poll_descriptors[i].fd]);
     }
 
     scoring += "\r\n";
