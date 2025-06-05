@@ -65,13 +65,16 @@ void moveline(int in, int out) {
             syserr("read");
         }
 
+        std::cout << static_cast<int>(c) << std::endl;
+
         if (write(out, &c, 1) != 1) {
             syserr("write");
-            break;
         }
-        if (c == '\n' && prev == '\r') {
+
+        if ((c == '\n' && prev == '\r') || c == EOF) {
             break; // stop after reading one line
         }
+
         prev = c;
     }
 }
