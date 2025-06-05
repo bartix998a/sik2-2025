@@ -106,6 +106,7 @@ void run_server(int port, const std::string& file) {
                 } else if (checkPut(msg)) {
                     if ((last_msg[i] != COEFF && last_msg[i] != STATE)
                         || answering(poll_descriptors[i].fd)) {
+                        std::cout << (last_msg[i] != COEFF && last_msg[i] != STATE) << " " << answering(poll_descriptors[i].fd) << std::endl;
                         add_penalty(poll_descriptors[i].fd, msg);
                     } else if (!checkPutVals(msg)) {
                         auto tmp = "BAD PUT " + msg.substr(4, msg.size() - 1);
