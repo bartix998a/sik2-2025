@@ -19,7 +19,7 @@ std::string print_ip_info(int fd) {
             struct sockaddr_in *ipv4 = (struct sockaddr_in *) &addr;
             char ipstr[INET_ADDRSTRLEN];
             inet_ntop(AF_INET, &(ipv4->sin_addr), ipstr, sizeof(ipstr));
-            return std::string(ipstr) + ":" + std::to_string(ipv4->sin_port);
+            return std::string(ipstr) + ":" + std::to_string(ntohs(ipv4->sin_port));
         }
         case AF_INET6: {
             struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *) &addr;

@@ -50,7 +50,7 @@ std::string read_msg(int socket_fd) {
     res += input;
 
     if constexpr (debug) {
-        std::cerr << "recieved message " << res << std::endl;
+        std::cerr << "recieved message " << res;
     }
 
     return res;
