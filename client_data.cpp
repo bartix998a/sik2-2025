@@ -60,7 +60,7 @@ void execute_tasks() {
                     remove_client(std::get<3>(task));
                     break;
                 case SEND_WITH_DELAY:
-                    writen(std::get<3>(task), std::get<2>(task).get(), std::get<2>(task)->size());
+                    writen(std::get<3>(task), std::get<2>(task).get()->data(), std::get<2>(task)->size());
                     break;
                 case REMOVE:
                     std::erase_if(poll_descriptors, [task](pollfd f) { return f.fd == get<3>(task); });
