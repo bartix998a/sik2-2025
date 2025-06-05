@@ -72,7 +72,7 @@ void moveline(int in, int out) {
         }
 
         if ((c == '\n' && prev == '\r') || c == EOF) {
-            std::cout << "breaking"
+            std::cout << "breaking";
             break; // stop after reading one line
         }
 
