@@ -137,7 +137,7 @@ int run_client(int server_fd, const std::string& id) {
     }
 
     while (true) {
-        if (poll(poll_descriptors, 2, 0) < 0) {
+        if (poll(poll_descriptors, 2, -1) < 0) {
             syserr("poll");
         }
 
@@ -152,7 +152,7 @@ int run_client(int server_fd, const std::string& id) {
             poll_descriptors[0].revents = 0;
         }
 
-        if (process_msg(server_fd, ret)) {
+        if (poll_descriptors[1].revents == POLLIN && process_msg(server_fd, ret)) {
             return ret;
         }
     }
