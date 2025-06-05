@@ -93,7 +93,7 @@ void run_server(int port, const std::string& file) {
 
         for (size_t i = 1; i < poll_descriptors.size() && puts_count++; i ++) {
             if (poll_descriptors[i].revents & (POLLIN | POLLERR)) {
-                std::cout << "recieving message" << std::endl;
+                std::cout << i << " " << poll_descriptors[i].revents << std::endl;
                 std::string msg = read_msg(poll_descriptors[i].fd);
                 if (checkHello(msg) && last_msg[i] == None) {
                     std::cout << print_ip_info(poll_descriptors[i].fd) << " is now know as " << split(msg, ' ')[1] << std::endl;
