@@ -62,11 +62,8 @@ void moveline(int in, int out) {
     char prev = '\000';
     while ((read_out = read(in, &c, 1)) == 1) {
         if (read_out < 0) {
-            std::cout << "is this really this syserror" << std::endl;
             syserr("read");
         }
-
-        std::cout << static_cast<int>(c) << std::endl;
 
         if (write(out, &c, 1) != 1) {
             syserr("write");
