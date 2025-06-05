@@ -82,12 +82,12 @@ bool checkHello(const std::string& msg) {
 }
 
 bool checkPut(const std::string& msg) {
-    std::regex put_reg("PUT [a-zA-Z0-9]* " + point_reg + " " + rational_reg + "\r\n");
+    std::regex put_reg("PUT " + point_reg + " " + rational_reg + "\r\n");
     return std::regex_match(msg, put_reg);
 }
 
 bool checkState(const std::string& msg) {
-    std::regex state_reg("PUT " + point_reg + " " + rational_reg + "\r\n");
+    std::regex state_reg("STATE( " + rational_reg + ")*\r\n");
     return std::regex_match(msg, state_reg);
 }
 
