@@ -8,8 +8,6 @@
 #include <iostream>
 #include <poll.h>
 #include <algorithm>
-#include <limits>
-#include <iomanip>
 
 #include "common.h"
 #include "common2.h"
@@ -37,7 +35,7 @@ void add_player_score(int client_fd, const std::string& player_id) {
 
 std::string get_state(int client_fd) {
     std::ostringstream ss;
-    ss << "STATE" << std::fixed << std::setprecision(7);
+    ss << "STATE";
     for (auto el : approximations[client_fd]) {
         ss << " " << el;
     }
