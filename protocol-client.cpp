@@ -21,17 +21,6 @@
 #include "common.h"
 #include "common2.h"
 
-double eval(const std::vector<double>& coeffs, int K) {
-    double result = 0;
-    int power = 1;  // K^0 initially
-
-    for (auto coeff : coeffs) {
-        result += coeff * power;
-        power *= K;
-    }
-
-    return result;
-}
 
 template <typename T> int sgn(T val) {
     return (T(0) < val) - (val < T(0));

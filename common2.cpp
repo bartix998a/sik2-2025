@@ -4,8 +4,22 @@
 
 #include <string>
 #include <arpa/inet.h>
+#include <vector>
 
 #include "err.h"
+
+double eval(const std::vector<double>& coeffs, int K) {
+    double result = 0;
+    int power = 1;  // K^0 initially
+
+    for (auto coeff : coeffs) {
+        result += coeff * power;
+        power *= K;
+    }
+
+    return result;
+}
+
 
 std::string print_ip_info(int fd) {
     struct sockaddr_in6 addr;

@@ -98,15 +98,13 @@ void run_server(int port, const std::string& file) {
                 std::string msg = read_msg(poll_descriptors[i].fd);
                 if (checkHello(msg) && last_msg[i] == None) {
                     std::cout << print_ip_info(poll_descriptors[i].fd) << " is now know as " << split(msg, ' ')[1];
-                    moveline(coeffs, poll_descriptors[i].fd);
-                    std::cout << "Sent coefficients to " << split(msg, ' ')[1];
+                    send_coeffs(poll_descriptors[i].fd,coeffs);
                     last_msg[i] = COEFF;
                     add_player_score(poll_descriptors[i].fd, split(msg, ' ')[1]);
                     handle_hello(poll_descriptors[i].fd);
                 } else if (checkPut(msg)) {
                     if ((last_msg[i] != COEFF && last_msg[i] != STATE)
                         || answering(poll_descriptors[i].fd)) {
-                        std::cout << (last_msg[i] != COEFF && last_msg[i] != STATE) << " " << answering(poll_descriptors[i].fd) << std::endl;
                         add_penalty(poll_descriptors[i].fd, msg);
                     } else if (!checkPutVals(msg)) {
                         auto tmp = "BAD PUT " + msg.substr(4, msg.size() - 1);
@@ -124,6 +122,10 @@ void run_server(int port, const std::string& file) {
             } else if (poll_descriptors[i].revents & POLLHUP) {
                 remove_client_score(poll_descriptors[i].fd);
                 remove_client(poll_descriptors[i].fd);
+            }
+
+            if (puts_count == M) {
+                break;
             }
         }
 

@@ -17,6 +17,7 @@
 
 static std::map<int, std::string> ids;
 static std::map<int, std::vector<double>> approximations;
+static std::map<int, std::vector<double>> coeffs;
 static std::map<int, int> penalties;
 static std::map<int, int> client_puts;
 
@@ -69,7 +70,6 @@ bool checkPutVals(const std::string& msg) {
            std::strtol(sp[2].data(), nullptr, 10) <= 5;
 }
 
-// TODO: check if disconnected puts are counted towards M
 void remove_client_score(int client_fd) {
     M -= client_puts[client_fd];
     ids.erase(client_fd);
@@ -77,8 +77,40 @@ void remove_client_score(int client_fd) {
     penalties.erase(client_fd);
 }
 
-void send_scoring() {
+void send_coeffs(int fd, int coeffs_fd) {
+    std::string coeffs_msg = read_msg(coeffs_fd);
+    writen(fd, coeffs_msg.data(), coeffs_msg.size());
+    auto coeffs_split = split(coeffs_msg,' ');
+    std::cout << ids[fd] << " get coefficients " << coeffs_msg.substr(6, coeffs.size());
+    std::vector<double> res;
+    std::transform(coeffs_split.begin() + 1, coeffs_split.end(), std::back_inserter(res),
+                   [](auto& s){return std::stod(s);});
+    coeffs[fd] = res;
+}
 
+double calculate_score(int client_fd) {
+    double res = 0;
+    for (size_t i = 0; i < coeffs[client_fd].size(); i++) {
+        auto tmp = approximations[client_fd][i] - eval(coeffs[client_fd], i);
+        res += tmp * tmp;
+    }
+    return res;
+}
+
+void send_scoring() {
+    std::string scoring = "";
+    for (auto fd : poll_descriptors) {
+        scoring += " " + ids[fd.fd];
+        scoring += " " + std::to_string(calculate_score(fd.fd) - penalties[fd.fd]);
+    }
+
+    scoring += "\r\n";
+    std::cout << "Game end, scoring:" << scoring;
+
+    for (auto fd :poll_descriptors) {
+        add_send(fd.fd, 0, "SCORING" + scoring);
+    }
+    execute_tasks();
 }
 
 void clear_game() {
