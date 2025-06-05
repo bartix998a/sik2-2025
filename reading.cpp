@@ -87,7 +87,7 @@ bool checkPut(const std::string& msg) {
 }
 
 bool checkState(const std::string& msg) {
-    std::regex state_reg("STATE( " + rational_reg + ")*\r\n");
+    std::regex state_reg("STATE( " + rational_reg + "){1,}\r\n");
     return std::regex_match(msg, state_reg);
 }
 
