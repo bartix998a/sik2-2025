@@ -48,6 +48,7 @@ void handle_hello(int client_fd) {
                             {return std::get<3>(t) == client_fd && get<1>(t) == WAIT_FOR_HELLO;});
 }
 
+// might break cause you remove stuff inside switch statement
 void execute_tasks() {
     auto now = system_clock::now();
     for (auto task : tasks) {
