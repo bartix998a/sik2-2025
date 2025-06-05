@@ -111,6 +111,7 @@ void run_server(int port, const std::string& file) {
                 } else {
                     handle_wrong_message(poll_descriptors[i].fd, msg);
                 }
+                poll_descriptors[i].revents = 0;
             } else if (poll_descriptors[i].revents & POLLHUP) {
                 remove_client_score(poll_descriptors[i].fd);
                 remove_client(poll_descriptors[i].fd);
