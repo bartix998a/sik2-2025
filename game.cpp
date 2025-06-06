@@ -87,7 +87,6 @@ void send_coeffs(int fd, int coeffs_fd) {
     std::string coeffs_msg = read_msg(coeffs_fd);
     writen(fd, coeffs_msg.data(), coeffs_msg.size());
     auto coeffs_split = split(coeffs_msg,' ');
-    std::cout << coeffs_msg;
     std::cout << ids[fd] << " get coefficients " << coeffs_msg.substr(6, coeffs_msg.size());
     std::vector<double> res;
     std::transform(coeffs_split.begin() + 1, coeffs_split.end(), std::back_inserter(res),
