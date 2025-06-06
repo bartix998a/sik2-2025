@@ -28,7 +28,7 @@ uint16_t read_port(char const *string) {
     return (uint16_t) port;
 }
 // returns connected socket
-int get_server_address(char const *host, uint16_t port, int ai_family) {
+int get_server_address(char const *host, char* port, int ai_family) {
     struct addrinfo hints;
     memset(&hints, 0, sizeof(struct addrinfo));
     hints.ai_family = ai_family;
@@ -36,7 +36,7 @@ int get_server_address(char const *host, uint16_t port, int ai_family) {
     hints.ai_protocol = IPPROTO_TCP;
 
     struct addrinfo *address_result;
-    int errcode = getaddrinfo(host, NULL, &hints, &address_result);
+    int errcode = getaddrinfo(host, port, &hints, &address_result);
     if (errcode != 0) {
         fatal("getaddrinfo: %s", gai_strerror(errcode));
     }

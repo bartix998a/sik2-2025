@@ -11,7 +11,7 @@ extern "C" {
 
 uint16_t read_port(char const *string);
 
-int get_server_address(char const *host, uint16_t port, int ai_family);
+int get_server_address(char const *host, char *port, int ai_family);
 
 ssize_t readn(int fd, void *vptr, size_t n);
 

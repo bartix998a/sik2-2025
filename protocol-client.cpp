@@ -80,7 +80,6 @@ bool process_msg(int fd, int& ret) {
 }
 
 int run_client_automatic(int server_fd, const std::string& id) {
-    unsigned long K;
     auto coeffs = send_hello(server_fd, id);
     if (coeffs.empty()) {
         return 1;
