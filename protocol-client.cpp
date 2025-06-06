@@ -86,7 +86,7 @@ int process_msg(int fd, int& ret) {
 int run_client_automatic(int server_fd, const std::string& id) {
     auto coeffs = send_hello(server_fd, id);
     int current_put = 0;
-    int K = INT_MAX;
+    size_t K = INT_MAX;
 
     if (coeffs.empty()) {
         return 1;
@@ -95,7 +95,6 @@ int run_client_automatic(int server_fd, const std::string& id) {
     int ret;
     while (true) {
         bool found = false;
-        std::cout << "restarted loop" << std::endl;
         for (size_t i = 0; i < K; i++) {
             if (vals.size() == i) {
                 vals.push_back(0.);

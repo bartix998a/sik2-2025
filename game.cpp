@@ -60,6 +60,9 @@ void add_put(int client_fd, const std::string& msg) {
     puts_count++;
     approximations[client_fd][std::strtol(split(msg, ' ')[1].data(), nullptr, 10)] +=
             std::strtold(split(msg, ' ')[2].data(), nullptr);
+
+    std::cout << ids[client_fd] << " puts " << split(msg, ' ')[2] << " in " << split(msg, ' ')[1] << std::endl;
+
     auto tmp = get_state(client_fd);
     auto delay = std::count_if(ids[client_fd].begin(), ids[client_fd].end(),
                                [](unsigned char c) {return std::islower(c);});
