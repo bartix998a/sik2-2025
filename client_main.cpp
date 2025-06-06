@@ -32,7 +32,7 @@ int main(int argc, char* argv[]) {
             {
                 auto tmp = std::strtol(optarg, nullptr, 10);
                 if(tmp > 65535 || tmp < 0) {
-                    wrong_args();
+                    wrong_args_client();
                 }
                 port = optarg;
                 break;
@@ -49,13 +49,13 @@ int main(int argc, char* argv[]) {
                 autoamted = true;
                 break;
             default:
-                wrong_args();
+                wrong_args_client();
                 return 1;
         }
     }
 
     if (server_ip.empty()) {
-        wrong_args();
+        wrong_args_client();
     }
 
     int socket_fd = get_server_address(server_ip.data(), port.data(), ai_family);

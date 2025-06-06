@@ -19,7 +19,9 @@ ssize_t writen(int fd, const void *vptr, size_t n);
 
 void install_signal_handler(int signal, void (*handler)(int));
 
-void wrong_args();
+void wrong_args_client();
+
+void wrong_args_server();
 
 #ifdef __cplusplus
 }

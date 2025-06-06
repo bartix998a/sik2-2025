@@ -62,7 +62,7 @@ int main(int argc, char* argv[]) {
             case 'k': {
                 long val = std::strtol(optarg, nullptr, 10);
                 if (val < 1 || val > K_MAX) {
-                    wrong_args();
+                    wrong_args_server();
                 }
                 K = val;
                 break;
@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
             {
                 long val = std::strtol(optarg, nullptr, 10);
                 if (val < 1 || val > N_MAX) {
-                    wrong_args();
+                    wrong_args_server();
                 }
                 N = val;
                 break;
@@ -80,7 +80,7 @@ int main(int argc, char* argv[]) {
             {
                 long val = std::strtol(optarg, nullptr, 10);
                 if (val < 1 || val > M_MAX) {
-                    wrong_args();
+                    wrong_args_server();
                 }
                 M = val;
                 break;
@@ -89,13 +89,13 @@ int main(int argc, char* argv[]) {
                 file_path = optarg;
                 break;
             default:
-                wrong_args();
+                wrong_args_server();
                 return 1;
         }
     }
 
     if (file_path == "") {
-        wrong_args();
+        wrong_args_server();
     }
 
     run_server(get_socket(port), file_path);

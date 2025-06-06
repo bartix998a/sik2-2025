@@ -14,8 +14,12 @@
 #include "err.h"
 #include "common.h"
 
-void wrong_args() {
-    fatal("usage: -b <bind_address> -p <port> -a peer_address -r peer_port");
+void wrong_args_client() {
+    fatal("usage: -u <player_id> -p <port> -s <server> -4 -6 -a");
+}
+
+void wrong_args_server() {
+    fatal("usage: -p <port> -k <value> -n <value> -m <value> -f <file>");
 }
 
 uint16_t read_port(char const *string) {
