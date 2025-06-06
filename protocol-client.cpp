@@ -95,6 +95,7 @@ int run_client_automatic(int server_fd, const std::string& id) {
     int ret;
     while (true) {
         bool found = false;
+        std::cout << "restarted loop" << std::endl;
         for (size_t i = 0; i < K; i++) {
             if (vals.size() == i) {
                 vals.push_back(0.);
