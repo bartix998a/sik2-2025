@@ -6,8 +6,10 @@
 #include <sys/socket.h>
 #include <cstring>
 #include <string>
+#include <iostream>
 
 #include "common.h"
+#include "common2.h"
 #include "err.h"
 #include "protocol-client.h"
 
@@ -56,6 +58,8 @@ int main(int argc, char* argv[]) {
     }
 
     int socket_fd = get_server_address(server_ip.data(), port.data(), ai_family);
+
+    std::cout << "Connected to " << print_ip_info(socket_fd) << std::endl;
 
     return autoamted ? run_client_automatic(socket_fd, id) : run_client(socket_fd, id);
 }
