@@ -122,7 +122,7 @@ int run_client_automatic(int server_fd, const std::string& id) {
             writen(server_fd, ss.str().data(), ss.str().size());
         }
 
-        if ((current_put = process_msg(server_fd, ret)) > 0) {
+        if ((current_put = process_msg(server_fd, ret)) == 0) {
             return ret;
         }
 
