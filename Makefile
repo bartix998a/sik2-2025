@@ -16,7 +16,7 @@ SERVER_BIN = approx-server
 CLIENT_BIN = approx-client
 
 # Object directories
-OBJDIR = obj
+OBJDIR = .
 SRCDIRS = .
 
 # Convert .c and .cpp files to .o
