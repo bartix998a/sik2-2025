@@ -53,6 +53,8 @@ void run_server(int socket_fd, const std::string& file) {
                 syserr("accept");
             }
 
+            std::cout << "New client " << print_ip_info(client_fd) << "." << std::endl;
+
             // Set to nonblocking mode.
             if (fcntl(client_fd, F_SETFL, O_NONBLOCK)) {
                 syserr("fcntl");
