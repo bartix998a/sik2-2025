@@ -41,8 +41,6 @@ void run_server(int socket_fd, const std::string& file) {
             p.revents = 0;
         }
 
-        std::cout << poll_descriptors[0].fd << " " << poll_descriptors.size() << std::endl;
-
         if (poll(poll_descriptors.data(), poll_descriptors.size(),
                  get_timeout()) < 0) {
             syserr("poll");
