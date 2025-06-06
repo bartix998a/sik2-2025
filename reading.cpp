@@ -56,7 +56,7 @@ std::string read_msg(int socket_fd, bool reading_stdin) {
 // The functions below verify correctness of appropriate messages.
 
 bool checkHello(const std::string& msg) {
-    std::regex put_reg("HELLO [a-zA-Z0-9]*\r\n");
+    std::regex put_reg("HELLO [a-zA-Z0-9]{1,}\r\n");
     return std::regex_match(msg, put_reg);
 }
 
