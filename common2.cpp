@@ -5,6 +5,9 @@
 #include <string>
 #include <arpa/inet.h>
 #include <vector>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
 
 #include "err.h"
 
@@ -28,21 +31,32 @@ std::string print_ip_info(int fd) {
     if (getpeername(fd, (struct sockaddr*)&addr, &addrlen) < 0) {
         syserr("getpeername");
     }
+    std::string host;
+    std::string port;
+    host.resize(NI_MAXHOST);
+    port.resize(NI_MAXSERV);
 
-    switch (((sockaddr*) &addr)->sa_family) {
-        case AF_INET: {
-            struct sockaddr_in *ipv4 = (struct sockaddr_in *) &addr;
-            char ipstr[INET_ADDRSTRLEN];
-            inet_ntop(AF_INET, &(ipv4->sin_addr), ipstr, sizeof(ipstr));
-            return std::string(ipstr) + ":" + std::to_string(ntohs(ipv4->sin_port));
-        }
-        case AF_INET6: {
-            struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *) &addr;
-            char ipstr[INET_ADDRSTRLEN];
-            inet_ntop(AF_INET6, &(ipv6->sin6_addr), ipstr, sizeof(ipstr));
-            return std::string(ipstr) + ":" + std::to_string(ipv6->sin6_port);
-        }
-        default:
-            syserr("unknown protocol");
+    if (getnameinfo((struct sockaddr*)&addr, addrlen, host.data(), 100,
+            port.data(), 100, NI_NUMERICHOST | NI_NUMERICSERV) < 0) {
+        syserr("getnameinfo");
     }
+
+    return host + ":" + port;
+
+//    switch (((sockaddr*) &addr)->sa_family) {
+//        case AF_INET: {
+//            struct sockaddr_in *ipv4 = (struct sockaddr_in *) &addr;
+//            char ipstr[INET_ADDRSTRLEN];
+//            inet_ntop(AF_INET, &(ipv4->sin_addr), ipstr, sizeof(ipstr));
+//            return std::string(ipstr) + ":" + std::to_string(ntohs(ipv4->sin_port));
+//        }
+//        case AF_INET6: {
+//            struct sockaddr_in6 *ipv6 = (struct sockaddr_in6 *) &addr;
+//            char ipstr[INET_ADDRSTRLEN];
+//            inet_ntop(AF_INET6, &(ipv6->sin6_addr), ipstr, sizeof(ipstr));
+//            return std::string(ipstr) + ":" + std::to_string(ipv6->sin6_port);
+//        }
+//        default:
+//            syserr("unknown protocol");
+//    }
 }
