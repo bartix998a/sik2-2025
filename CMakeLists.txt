@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.25)
 project(zal1 CXX C)
 
-set(CMAKE_CXX_FLAGS "-std=gnu++20 -DDEBUG -Wall -Wextra")
-set(CMAKE_C_FLAGS "-std=gnu11 -DDEBUG -Wall -Wextra")
+set(CMAKE_CXX_FLAGS "-std=gnu++20 -Wall -Wextra")
+set(CMAKE_C_FLAGS "-std=gnu11 -Wall -Wextra")
 
 add_executable(approx-server server_main.cpp
         err.c
