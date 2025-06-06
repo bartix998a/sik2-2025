@@ -24,38 +24,9 @@
 
 static socklen_t sockaddr_in_len = sizeof(sockaddr_in);
 
-int get_socket(int port) {
-    int socket_fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (socket_fd < 0) {
-        syserr("cannot create a socket");
-    }
 
-    // Bind the socket to a concrete address.
-    struct sockaddr_in server_address;
-    server_address.sin_family = AF_INET; // IPv4
-    server_address.sin_addr.s_addr = htonl(INADDR_ANY); // Listening on all interfaces.
-    server_address.sin_port = htons(port);
 
-    if (bind(socket_fd, (struct sockaddr *) &server_address, (socklen_t) sizeof server_address) < 0) {
-        syserr("bind");
-    }
-
-    // Switch the socket to listening.
-    if (listen(socket_fd, 100) < 0) {
-        syserr("listen");
-    }
-
-    if constexpr (debug) {
-        std::cerr << "listening on port " << port << std::endl;
-    }
-
-    return socket_fd;
-}
-
-// TODO: add last_msg to client_data
-// TODO: disconect upon no hello probably causes segfault
-void run_server(int port, const std::string& file) {
-    int socket_fd = get_socket(port);
+void run_server(int socket_fd, const std::string& file) {
     int coeffs = open(file.data(), O_RDONLY);
 
     // Initialization of pollfd structures.

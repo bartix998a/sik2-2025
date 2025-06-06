@@ -27,11 +27,11 @@ uint16_t read_port(char const *string) {
     }
     return (uint16_t) port;
 }
-
-struct sockaddr_in get_server_address(char const *host, uint16_t port) {
+// returns connected socket
+int get_server_address(char const *host, uint16_t port, int ai_family) {
     struct addrinfo hints;
     memset(&hints, 0, sizeof(struct addrinfo));
-    hints.ai_family = AF_INET; // IPv4
+    hints.ai_family = ai_family;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
 
@@ -41,15 +41,17 @@ struct sockaddr_in get_server_address(char const *host, uint16_t port) {
         fatal("getaddrinfo: %s", gai_strerror(errcode));
     }
 
-    struct sockaddr_in send_address;
-    send_address.sin_family = AF_INET;   // IPv4
-    send_address.sin_addr.s_addr =       // IP address
-            ((struct sockaddr_in *) (address_result->ai_addr))->sin_addr.s_addr;
-    send_address.sin_port = htons(port); // port from the command line
+    int socket_fd = socket(address_result->ai_family, address_result->ai_socktype, address_result->ai_protocol);
+    if (socket_fd < 0) {
+        syserr("cannot create a socket");
+    }
 
+    if (connect(socket_fd, address_result->ai_addr, address_result->ai_addrlen) < 0) {
+        syserr("cannot connect to the server");
+    }
     freeaddrinfo(address_result);
 
-    return send_address;
+    return socket_fd;
 }
 
 // Following two functions come from Stevens' "UNIX Network Programming" book.

@@ -66,7 +66,7 @@ bool process_msg(int fd, int& ret) {
 
     auto msg_factorized = split(msg, ' ');
     if (msg_factorized[0] == "SCORING") {
-        std::cout << "Game end, scoring: " << msg.substr(5, msg.size() - 2) << std::endl;
+        std::cout << "Game end, scoring: " << msg.substr(8, msg.size() - 2) << std::endl;
         ret = 0;
         return true;
     } else if (msg_factorized[0] == "STATE" && checkState(msg)) {

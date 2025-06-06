@@ -15,13 +15,10 @@
 int main(int argc, char* argv[]) {
     int opt;
     uint16_t  port = 0;
-    uint16_t ip_type = AF_UNSPEC;
+    int ai_family = AF_UNSPEC;
     std::string id = "";
     std::string server_ip = "";
     bool autoamted = false;
-    auto tmp = 0;
-    struct sockaddr_in addr;
-    //TODO: -4 or -6
     while ((opt = getopt(argc, argv, "u:s:p:46a")) != -1) {
         switch (opt) {
             case 'u':
@@ -38,11 +35,11 @@ int main(int argc, char* argv[]) {
             }
             case '4':
             {
-                ip_type = AF_INET;
+                ai_family = AF_INET;
                 break;
             }
             case '6':
-                ip_type = AF_INET6;
+                ai_family = AF_INET6;
                 break;
             case 'a':
                 autoamted = true;
@@ -53,18 +50,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    //TODO: ipv6
-    int socket_fd = socket(AF_INET, SOCK_STREAM, 0);
-    if (socket_fd < 0) {
-        syserr("cannot create a socket");
-    }
-
-    addr = get_server_address(server_ip.data(), port);
-
-    if (connect(socket_fd, (struct sockaddr *) &addr,
-                (socklen_t) sizeof(addr)) < 0) {
-        syserr("cannot connect to the server");
-    }
+    int socket_fd = get_server_address(server_ip.data(), port, ai_family);
 
     return autoamted ? run_client_automatic(socket_fd, id) : run_client(socket_fd, id);
 }
