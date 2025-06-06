@@ -135,7 +135,7 @@ int run_client(int server_fd, const std::string& id) {
             if (checkPutPlayerInput(line)) {
                 auto tmp = "PUT " + line.substr(0, line.size() - 1) + "\r\n";
                 writen(poll_descriptors[1].fd, tmp.data(), tmp.size());
-                std::cout << "Sent " << tmp;
+                std::cout << "Putting " << split(line, ' ')[1] << " in " << split(line, ' ')[2];
             } else {
                 std::cout << "ERROR: invalid input line " << line;
             }
