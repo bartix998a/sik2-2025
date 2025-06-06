@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    if (server_ip.empty()) {
+    if (server_ip.empty() || id.empty() || port == "0") {
         wrong_args_client();
     }
 
