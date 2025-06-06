@@ -38,8 +38,8 @@ void run_server(int socket_fd, const std::string& file) {
 
     while (true) {
         struct sockaddr_in client_address;
-        for (auto p : poll_descriptors) {
-            p.revents = 0;
+        for (size_t i = 0; i < poll_descriptors.size(); i++) {
+            poll_descriptors[i].revents = 0;
         }
 
         if (poll(poll_descriptors.data(), poll_descriptors.size(),
