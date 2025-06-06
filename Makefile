@@ -51,6 +51,6 @@ $(OBJDIR):
 
 # Clean build artifacts
 clean:
-	rm -rf $(OBJDIR) $(SERVER_BIN) $(CLIENT_BIN)
+	rm -rf $(SERVER_BIN) $(CLIENT_BIN) *.o
 
 .PHONY: all clean
