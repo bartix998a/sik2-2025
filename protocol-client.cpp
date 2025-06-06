@@ -91,11 +91,14 @@ int run_client_automatic(int server_fd, const std::string& id) {
     if (coeffs.empty()) {
         return 1;
     }
-    std::vector<double> vals(coeffs.size(), 0);
+    std::vector<double> vals(0);
     int ret;
     while (true) {
         bool found = false;
         for (size_t i = 0; i < K; i++) {
+            if (vals.size() == i) {
+                vals.push_back(0.);
+            }
             auto diff = eval(coeffs, i) - vals[i];
             if (std::fabs(diff) > 0.0001) {
                 found = true;
