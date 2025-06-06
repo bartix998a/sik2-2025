@@ -11,6 +11,7 @@
 #include <queue>
 #include <fstream>
 #include <iostream>
+#include <thread>
 
 #include "protocol_server.h"
 #include "err.h"
@@ -103,6 +104,7 @@ void run_server(int socket_fd, const std::string& file) {
             send_scoring();
             clear_game();
             clear_tasks();
+            std::this_thread::sleep_for(std::chrono::seconds(1));
         }
 
 
