@@ -54,6 +54,10 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    if (server_ip.empty()) {
+        wrong_args();
+    }
+
     int socket_fd = get_server_address(server_ip.data(), port.data(), ai_family);
 
     return autoamted ? run_client_automatic(socket_fd, id) : run_client(socket_fd, id);
