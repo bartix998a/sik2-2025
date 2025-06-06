@@ -16,6 +16,10 @@
 #include "reading.h"
 #include "client_data.h"
 
+/*
+ * The following functions keep track of the state of the game including counting puts.
+ * */
+
 static std::map<int, std::string> ids;
 static std::map<int, std::vector<double>> approximations;
 static std::map<int, std::vector<double>> coeffs;
@@ -36,7 +40,6 @@ void add_player_score(int client_fd, const std::string& player_id) {
 }
 
 
-// TODO: format
 std::string get_state(int client_fd) {
     std::ostringstream ss;
     ss << "STATE" << std::fixed << std::setprecision(7);
@@ -124,29 +127,6 @@ void clear_game() {
     coeffs.clear();
     client_puts.clear();
     puts_count = 0;
-}
-
-std::string escapeWhitespace(const std::string& input) {
-    std::string output;
-    for (char c : input) {
-        switch (c) {
-            case ' ':
-                output += "\\s";  // or "\\ ", if you prefer
-                break;
-            case '\t':
-                output += "\\t";
-                break;
-            case '\n':
-                output += "\\n";
-                break;
-            case '\r':
-                output += "\\r";
-                break;
-            default:
-                output += c;
-        }
-    }
-    return output;
 }
 
 void handle_wrong_message(int fd, std::string& msg) {

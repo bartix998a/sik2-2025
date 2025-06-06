@@ -10,11 +10,11 @@
 
 #include "reading.h"
 #include "err.h"
-#include "debug.h"
 
 static std::string point_reg = "[0-9]+";
 static std::string rational_reg = R"([-+]?\d+(\.\d{0,7}){0,1})";
 
+// splits string by delimeter
 std::vector<std::string> split(const std::string& s, char delimiter) {
     std::vector<std::string> tokens;
     std::stringstream ss(s);
@@ -27,6 +27,7 @@ std::vector<std::string> split(const std::string& s, char delimiter) {
     return tokens;
 }
 
+// Read from socket_fd until \r\n sequence is encountered if reading_stdin = false or until \n otherwise
 std::string read_msg(int socket_fd, bool reading_stdin) {
     char input;
     bool end = false;
@@ -49,32 +50,10 @@ std::string read_msg(int socket_fd, bool reading_stdin) {
 
     res += input;
 
-    if constexpr (debug) {
-        std::cerr << "recieved message " << res;
-    }
-
     return res;
 }
 
-void moveline(int in, int out) {
-    int read_out = 0;
-    char c;
-    char prev = '\000';
-    while ((read_out = read(in, &c, 1)) == 1) {
-        if (read_out < 0) {
-            syserr("read");
-        }
-
-        if (write(out, &c, 1) != 1) {
-            syserr("write");
-        }
-
-        if ((c == '\n' && prev == '\r') || c == EOF) {
-            break; // stop after reading one line
-        }
-        prev = c;
-    }
-}
+// The functions below verify correctness of appropriate messages.
 
 bool checkHello(const std::string& msg) {
     std::regex put_reg("HELLO [a-zA-Z0-9]*\r\n");

@@ -30,10 +30,7 @@ int main(int argc, char* argv[]) {
             }
             case 'p':
             {
-                auto tmp = std::strtol(optarg, nullptr, 10);
-                if(tmp > 65535 || tmp < 0) {
-                    wrong_args_client();
-                }
+                read_port(optarg);
                 port = optarg;
                 break;
             }

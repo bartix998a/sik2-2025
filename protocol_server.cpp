@@ -12,7 +12,6 @@
 #include <fstream>
 #include <iostream>
 
-#include "debug.h"
 #include "protocol_server.h"
 #include "err.h"
 #include "common.h"
@@ -25,7 +24,7 @@
 static socklen_t sockaddr_in_len = sizeof(sockaddr_in);
 
 
-
+// Function handling logic for the server.
 void run_server(int socket_fd, const std::string& file) {
     int coeffs = open(file.data(), O_RDONLY);
 

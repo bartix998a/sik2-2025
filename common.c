@@ -13,7 +13,7 @@
 
 #include "err.h"
 #include "common.h"
-
+// Writes the standard wrong args error messagge for the server/client
 void wrong_args_client() {
     fatal("usage: -u <player_id> -p <port> -s <server> -4 -6 -a");
 }
@@ -22,6 +22,7 @@ void wrong_args_server() {
     fatal("usage: -p <port> -k <value> -n <value> -m <value> -f <file>");
 }
 
+// Reads port from string and termintaes program if port number is incorrect.
 uint16_t read_port(char const *string) {
     char *endptr;
     errno = 0;
@@ -31,7 +32,7 @@ uint16_t read_port(char const *string) {
     }
     return (uint16_t) port;
 }
-// returns connected socket
+// Returns socket connected to server with name host and service port. ai_family specifies ip used.
 int get_server_address(char const *host, char* port, int ai_family) {
     struct addrinfo hints;
     memset(&hints, 0, sizeof(struct addrinfo));
@@ -58,26 +59,6 @@ int get_server_address(char const *host, char* port, int ai_family) {
     return socket_fd;
 }
 
-// Following two functions come from Stevens' "UNIX Network Programming" book.
-// Read n bytes from a descriptor. Use in place of read() when fd is a stream socket.
-ssize_t readn(int fd, void *vptr, size_t n) {
-    ssize_t nleft, nread;
-    char *ptr;
-
-    ptr = vptr;
-    nleft = n;
-    while (nleft > 0) {
-        if ((nread = read(fd, ptr, nleft)) < 0)
-            return nread;     // When error, return < 0.
-        else if (nread == 0)
-            break;            // EOF
-
-        nleft -= nread;
-        ptr += nread;
-    }
-    return n - nleft;         // return >= 0
-}
-
 // Write n bytes to a descriptor.
 ssize_t writen(int fd, const void *vptr, size_t n){
     ssize_t nleft, nwritten;
@@ -93,18 +74,4 @@ ssize_t writen(int fd, const void *vptr, size_t n){
         ptr += nwritten;
     }
     return n;
-}
-
-void install_signal_handler(int signal, void (*handler)(int)) {
-    struct sigaction action;
-    sigset_t block_mask;
-
-    sigemptyset(&block_mask);
-    action.sa_handler = handler;
-    action.sa_mask = block_mask;
-    action.sa_flags = 0;
-
-    if (sigaction(signal, &action, NULL) < 0 ){
-        syserr("sigaction");
-    }
 }

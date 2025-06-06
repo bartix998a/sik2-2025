@@ -8,6 +8,7 @@
 
 #include "err.h"
 
+// Evaluates a polynomial with coefficients written in coeffs in the point K.
 double eval(const std::vector<double>& coeffs, int K) {
     double result = 0;
     int power = 1;  // K^0 initially
@@ -20,7 +21,7 @@ double eval(const std::vector<double>& coeffs, int K) {
     return result;
 }
 
-
+// Returns a string of the form "<hostname>:<port>" of the other device connected to fd.
 std::string print_ip_info(int fd) {
     struct sockaddr_in6 addr;
     socklen_t addrlen = std::max(sizeof(sockaddr_in), sizeof(sockaddr_in6));;

@@ -13,7 +13,6 @@
 #include "err.h"
 #include "common.h"
 #include "game.h"
-#include "debug.h"
 
 static constexpr uint16_t K_MAX = 10000;
 static constexpr uint16_t N_MAX = 8;
@@ -41,10 +40,6 @@ int get_socket(int port) {
     // Switch the socket to listening.
     if (listen(socket_fd, 100) < 0) {
         syserr("listen");
-    }
-
-    if constexpr (debug) {
-        std::cerr << "listening on port " << port << std::endl;
     }
 
     return socket_fd;
