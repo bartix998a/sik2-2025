@@ -1,32 +1,56 @@
-# Compiler and flags
-CXX := g++
-CC := gcc
-CXXFLAGS := -std=gnu++20 -Wall -Wextra
-CFLAGS := -std=gnu11 -Wall -Wextra
+# Compilers
+CC = gcc
+CXX = g++
 
-# Source files
-COMMON_SRCS := err.c common.c common2.cpp reading.cpp message.h
+# Compiler flags
+CFLAGS = -std=gnu11 -Wall -Wextra
+CXXFLAGS = -std=gnu++20 -Wall -Wextra
 
-SERVER_SRCS := server_main.cpp client_data.cpp game.cpp protocol_server.cpp $(COMMON_SRCS)
-CLIENT_SRCS := client_main.cpp protocol-client.cpp $(COMMON_SRCS)
+# Sources
+COMMON_C_SRCS = err.c common.c common2.c reading.cpp
+SERVER_SRCS = server_main.cpp client_data.cpp game.cpp protocol_server.cpp $(COMMON_C_SRCS)
+CLIENT_SRCS = client_main.cpp protocol-client.cpp $(COMMON_C_SRCS)
 
-# Output binaries
-SERVER_BIN := approx-server
-CLIENT_BIN := approx-client
+# Executables
+SERVER_BIN = approx-server
+CLIENT_BIN = approx-client
+
+# Object directories
+OBJDIR = obj
+SRCDIRS = .
+
+# Convert .c and .cpp files to .o
+SERVER_OBJS = $(addprefix $(OBJDIR)/, $(SERVER_SRCS:.c=.o))
+SERVER_OBJS := $(SERVER_OBJS:.cpp=.o)
+
+CLIENT_OBJS = $(addprefix $(OBJDIR)/, $(CLIENT_SRCS:.c=.o))
+CLIENT_OBJS := $(CLIENT_OBJS:.cpp=.o)
 
 # Default target
 all: $(SERVER_BIN) $(CLIENT_BIN)
 
-# Server build
-$(SERVER_BIN): $(SERVER_SRCS)
-	$(CXX) $(CXXFLAGS) $(SERVER_SRCS) -o $(SERVER_BIN)
+# Build approx-server
+$(SERVER_BIN): $(SERVER_OBJS)
+	$(CXX) $(SERVER_OBJS) -o $@
 
-# Client build
-$(CLIENT_BIN): $(CLIENT_SRCS)
-	$(CXX) $(CXXFLAGS) $(CLIENT_SRCS) -o $(CLIENT_BIN)
+# Build approx-client
+$(CLIENT_BIN): $(CLIENT_OBJS)
+	$(CXX) $(CLIENT_OBJS) -o $@
 
-# Clean target
+# Compile C files
+$(OBJDIR)/%.o: %.c | $(OBJDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Compile C++ files
+$(OBJDIR)/%.o: %.cpp | $(OBJDIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Create obj directory if not exists
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
+
+# Clean build artifacts
 clean:
-	rm -f $(SERVER_BIN) $(CLIENT_BIN)
+	rm -rf $(OBJDIR) $(SERVER_BIN) $(CLIENT_BIN)
 
 .PHONY: all clean
