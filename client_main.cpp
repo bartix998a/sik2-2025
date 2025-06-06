@@ -14,7 +14,7 @@
 // TODO; required args
 int main(int argc, char* argv[]) {
     int opt;
-    std::string port = 0;
+    std::string port = "0";
     int ai_family = AF_UNSPEC;
     std::string id = "";
     std::string server_ip = "";
