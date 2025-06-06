@@ -20,10 +20,10 @@ OBJDIR = .
 SRCDIRS = .
 
 # Convert .c and .cpp files to .o
-SERVER_OBJS = $(addprefix $(OBJDIR)/, $(SERVER_SRCS:.c=.o))
+SERVER_OBJS = $(SERVER_SRCS:.c=.o)
 SERVER_OBJS := $(SERVER_OBJS:.cpp=.o)
 
-CLIENT_OBJS = $(addprefix $(OBJDIR)/, $(CLIENT_SRCS:.c=.o))
+CLIENT_OBJS = $(CLIENT_SRCS:.c=.o)
 CLIENT_OBJS := $(CLIENT_OBJS:.cpp=.o)
 
 # Default target
