@@ -64,7 +64,7 @@ ssize_t writen(int fd, const void *vptr, size_t n){
     ssize_t nleft, nwritten;
     const char *ptr;
 
-    ptr = vptr;               // Can't do pointer arithmetic on void*.
+    ptr = (const char*) vptr;               // Can't do pointer arithmetic on void*.
     nleft = n;
     while (nleft > 0) {
         if ((nwritten = write(fd, ptr, nleft)) <= 0)
