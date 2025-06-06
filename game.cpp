@@ -96,7 +96,7 @@ void send_coeffs(int fd, int coeffs_fd) {
 
 double calculate_score(int client_fd) {
     double res = 0;
-    for (size_t i = 0; i < coeffs[client_fd].size(); i++) {
+    for (size_t i = 0; i < K; i++) {
         auto tmp = approximations[client_fd][i] - eval(coeffs[client_fd], i);
         res += tmp * tmp;
     }

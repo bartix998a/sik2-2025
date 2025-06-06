@@ -14,6 +14,7 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <fcntl.h>
+#include <climits>
 
 #include "err.h"
 #include "protocol-client.h"
@@ -55,41 +56,49 @@ std::vector<double> send_hello(int server_fd, const std::string& id) {
     return res;
 }
 
-bool process_msg(int fd, int& ret) {
+int process_msg(int fd, int& ret) {
     std::string msg = read_msg(fd);
 
     if (msg == "") {
         std::cerr << "ERROR: unexpected server disconnect" << std::endl;
         ret = 1;
-        return true;
+        return 0;
     }
 
     auto msg_factorized = split(msg, ' ');
     if (msg_factorized[0] == "SCORING") {
         std::cout << "Game end, scoring: " << msg.substr(8, msg.size() - 2) << std::endl;
         ret = 0;
-        return true;
+        return 0;
     } else if (msg_factorized[0] == "STATE" && checkState(msg)) {
         std::cout << "Recieved state " << msg.substr(5, msg.size());
     } else if (msg_factorized[0] == "COEFFS" && checkCoeff(msg)) {
-        std::cout << "Recieved coefficients " << msg.substr(5, msg.size());
+        std::cout << "Recieved coefficients " << msg.substr(6);
+    } else if (msg_factorized[0] == "BAD_PUT" && checkBadPut(msg)) {
+        std::cout << "Bad put " << msg.substr(7);
+        return 2;
     } else {
         print_bad_msg(fd, msg);
     }
-    return false;
+    return 1;
 }
 
 int run_client_automatic(int server_fd, const std::string& id) {
     auto coeffs = send_hello(server_fd, id);
+    int current_put = 0;
+    int K = INT_MAX;
+
     if (coeffs.empty()) {
         return 1;
     }
     std::vector<double> vals(coeffs.size(), 0);
     int ret;
     while (true) {
-        for (size_t i = 0; i < coeffs.size(); i++) {
+        bool found = false;
+        for (size_t i = 0; i < K; i++) {
             auto diff = eval(coeffs, i) - vals[i];
             if (std::fabs(diff) > 0.0001) {
+                found = true;
                 auto value = sgn(diff) * std::min(fabs(eval(coeffs, i) - vals[i]), 5.);
                 vals[i] += value;
                 std::ostringstream ss;
@@ -100,8 +109,21 @@ int run_client_automatic(int server_fd, const std::string& id) {
             }
         }
 
-        if (process_msg(server_fd, ret)) {
+        if (!found) {
+            auto value = 0.;
+            vals[0] += value;
+            std::ostringstream ss;
+            ss << "PUT " << 0 << " " << value << "\r\n";
+            std::cout << "Putting " << value << " in " << 0 << std::endl;
+            writen(server_fd, ss.str().data(), ss.str().size());
+        }
+
+        if ((current_put = process_msg(server_fd, ret)) > 0) {
             return ret;
+        }
+
+        if (current_put == 2) {
+            K = current_put;
         }
     }
 }

@@ -65,6 +65,11 @@ bool checkPut(const std::string& msg) {
     return std::regex_match(msg, put_reg);
 }
 
+bool checkBadPut(const std::string& msg) {
+    std::regex put_reg("BAD_PUT " + point_reg + " " + rational_reg + "\r\n");
+    return std::regex_match(msg, put_reg);
+}
+
 bool checkState(const std::string& msg) {
     std::regex state_reg("STATE( " + rational_reg + "){1,}\r\n");
     return std::regex_match(msg, state_reg);

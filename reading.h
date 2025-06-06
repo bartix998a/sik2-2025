@@ -16,5 +16,6 @@ bool checkCoeff(const std::string& msg);
 bool checkState(const std::string& msg);
 bool checkPutPlayerInput(const std::string& msg);
 std::vector<std::string> split(const std::string& s, char delimiter);
+bool checkBadPut(const std::string& msg);
 
 #endif //ZAL1_READING_H
