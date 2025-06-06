@@ -41,5 +41,5 @@ std::string print_ip_info(int fd) {
         syserr("getnameinfo");
     }
 
-    return (addr.sin6_family == AF_INET6 ? host : host.substr(7)) + ":" + port;
+    return (IN6_IS_ADDR_V4MAPPED(&addr.sin6_addr) ? host.substr(7) : host) + ":" + port;
 }
